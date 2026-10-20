@@ -1,0 +1,110 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>My Watchlist</title>
+<style>
+:root { color-scheme: light dark; --bg: light-dark(#f7f5f0,#171916); --card: light-dark(#ffffff,#242824); --ink: light-dark(#202720,#f1f3ee); --muted: light-dark(#687268,#aab3a8); --line: light-dark(#e1e5dc,#3b433b); --accent: light-dark(#3f6c52,#a8d5ad); --soft: light-dark(#e7eee4,#29392d); }
+* { box-sizing:border-box } body { margin:0;background:var(--bg);color:var(--ink);font:16px/1.45 system-ui,-apple-system,Segoe UI,sans-serif }
+main { max-width:780px;margin:0 auto;padding:22px 14px 44px } header { padding:8px 2px 16px }
+.eyebrow { color:var(--accent);font-weight:750;letter-spacing:.12em;text-transform:uppercase;font-size:12px }
+h1 { margin:6px 0 5px;font-size:clamp(28px,6vw,38px);letter-spacing:-.04em } p { color:var(--muted);margin:0 }
+.progressbox { background:var(--card);border:1px solid var(--line);border-radius:18px;padding:15px;margin:12px 0 15px }
+.progressline { display:flex;justify-content:space-between;gap:12px;font-size:14px;margin-bottom:10px }
+.track { height:8px;border-radius:99px;background:var(--line);overflow:hidden }.fill { height:100%;width:0%;background:var(--accent);transition:width .2s }
+.tabs { display:flex;gap:7px;overflow-x:auto;padding:2px 0 8px;margin-bottom:8px }
+.tab { white-space:nowrap;padding:9px 13px;border-radius:999px;background:var(--card);border:1px solid var(--line);font-size:14px }
+.tab.active { background:var(--accent);color:light-dark(#fff,#152319);border-color:var(--accent);font-weight:700 }
+.controls { display:flex;gap:8px;margin:10px 0 } input[type=search],input[type=text],select { flex:1;min-width:0;border:1px solid var(--line);border-radius:12px;padding:12px;background:var(--card);color:var(--ink);font:inherit }
+button { border:1px solid var(--line);border-radius:12px;background:var(--card);color:var(--ink);padding:10px 13px;font:inherit;cursor:pointer }
+button:focus-visible,input:focus-visible,select:focus-visible { outline:3px solid var(--accent);outline-offset:2px }
+.addbox { display:none;background:var(--soft);border:1px solid var(--line);border-radius:16px;padding:13px;margin:12px 0 }
+.addbox.open { display:block }.addbox h2 { font-size:17px;margin:0 0 10px }.addrow { display:flex;gap:8px;flex-wrap:wrap }.addrow input { flex:1 1 180px }.addrow select { flex:0 1 135px }
+.sectionhead { display:flex;align-items:center;justify-content:space-between;gap:10px;margin:16px 2px 9px }.sectionhead h2 { margin:0;font-size:18px }.small { color:var(--muted);font-size:13px }
+.list { background:var(--card);border:1px solid var(--line);border-radius:18px;overflow:hidden }
+.item { display:flex;align-items:flex-start;gap:11px;padding:13px 14px;border-bottom:1px solid var(--line) }.item:last-child { border-bottom:0 }
+.item input[type=checkbox] { width:20px;height:20px;margin:2px 0 0;accent-color:var(--accent);flex-shrink:0 }
+.item .name { flex:1;overflow-wrap:anywhere }.item.done .name { color:var(--muted);text-decoration:line-through }
+.meta { display:block;color:var(--muted);font-size:11px;margin-top:2px }.tag { font-size:11px;border-radius:7px;padding:3px 7px;background:var(--soft);color:var(--muted);align-self:center;white-space:nowrap }
+.remove { border:0;background:transparent;padding:3px 5px;color:var(--muted);font-size:18px }
+.empty { padding:22px;color:var(--muted);text-align:center }
+footer { color:var(--muted);font-size:12px;text-align:center;padding:18px 0 }
+@media(max-width:480px) { .tag { display:none }.controls button { padding:10px }.addrow select { flex:1 1 100% } }
+</style>
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="theme-color" content="#3f6c52">
+<link rel="icon" href="icon.svg" type="image/svg+xml">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="My Watchlist">
+<script>if("serviceWorker" in navigator){window.addEventListener("load",()=>navigator.serviceWorker.register("service-worker.js").catch(()=>{}));}</script></head><body><main>
+<header><div class="eyebrow">Your personal watchlist</div><h1>🎬 My Watchlist</h1><p>Movies, series and anime — all in one place. Tick items when you finish them.</p></header>
+<section class="progressbox" aria-live="polite"><div class="progressline"><strong id="count">0 watched</strong><span id="percent">0%</span></div><div class="track"><div class="fill" id="fill"></div></div></section>
+<div class="tabs" id="tabs">
+<button class="tab active" data-tab="all">All</button><button class="tab" data-tab="recent">Recently added</button><button class="tab" data-tab="movies">Movies</button><button class="tab" data-tab="series">Series</button><button class="tab" data-tab="anime">Anime</button><button class="tab" data-tab="watched">Watched</button>
+</div>
+<div class="controls"><input id="search" type="search" placeholder="Search titles…" aria-label="Search titles"><button id="addtoggle" type="button">＋ Add new</button></div>
+<section class="addbox" id="addbox"><h2>Add to your watchlist</h2><form id="addform"><div class="addrow"><input id="newtitle" type="text" placeholder="Enter movie, series or anime title" required maxlength="140"><select id="newtype" aria-label="Type"><option value="Movie">Movie</option><option value="Series">Series</option><option value="Anime">Anime</option></select><button type="submit">Add title</button></div></form><p class="small" style="margin-top:8px">New titles appear in Recently added and the matching category.</p></section>
+<div class="sectionhead"><h2 id="listtitle">All titles</h2><span class="small" id="shown"></span></div>
+<div class="list" id="list"></div>
+<div class="controls"><button id="copy" type="button">Copy current list</button><button id="export" type="button">Export backup</button></div>
+<footer>Your checklist is saved in this browser on this device. Use Export backup to keep a copy before clearing browser data.</footer>
+</main><script>
+const initialTitles = ["Wild Robot", "Atonement", "No country for old man", "We live in time", "Song of sparrow", "Riffle club", "Tell me who I am", "1917", "Mystic river", "The prisoners", "Exhuma", "The usual suspects", "Persuit of happiness", "Bullet of train", "What’s eating Gilbert grape", "How to make millions before grandma dies", "On your wedding day", "Don’t breath", "La la land", "Sookmadharshini", "Love letter", "The kite runner", "Before sunset", "Nosferatu", "Whip lash", "Black swan", "ARM", "The substance", "Incendies", "Midsummer", "Dune", "Wolf of the Wall Street", "Her", "Everything everywhere all at once", "Joy land", "Portrait of a lady on fire", "Gifted", "Begin again", "Poor things", "Officer on duty", "Taxi driver", "Taken", "The whale", "Past live", "Moonlight", "Dancer in the dark", "Big world", "Girls will be girls", "Miracle in Cell No. 7", "Anatomy of fall", "Anora", "The Darjeeling Limited", "Spirits home coming", "Flow", "Waiting", "12 years of slave", "Jojo rabbit", "Memoir of murder", "Better days", "Love Sonia", "Perks of being a wallflower", "The aviator", "Ne zha", "Schindler's List", "Conclave", "Cast Away", "Prisoners", "The lovely bones", "Capernaum", "About time", "Burning", "Crunch roll", "Home bound", "Superhero of melegaon", "Life is beautiful", "The ugly", "Bugonia", "Hacksaw ridge", "Sympathy for mr vengeance", "Children of men", "Ex machina", "Primer", "12 angry man", "Heat", "Girl with dragon tattoo", "Raakh", "Wrong turn", "Rigor mortis", "Perfect days", "Mother", "Tar", "Iruvar", "Voice mail for Isabel", "War machine", "Elephant man", "Shoplifters", "Theeran Adhigaaram Ondru"];
+const STORAGE_KEY = "my-watchlist-v2";
+let items = [];
+try {
+ const saved = JSON.parse(localStorage.getItem(STORAGE_KEY) || "null");
+ if (Array.isArray(saved) && saved.length) items = saved;
+} catch(e) {}
+if (!items.length) items = initialTitles.map((title,i)=>({id:"initial-"+i,title,type:"Movie",watched:false,addedAt:i,original:true}));
+let currentTab = "all";
+const list = document.getElementById("list");
+function save(){ try{localStorage.setItem(STORAGE_KEY,JSON.stringify(items));}catch(e){} }
+function labelForTab(tab){return ({all:"All titles",recent:"Recently added",movies:"Movies",series:"Series",anime:"Anime",watched:"Watched"})[tab]||"All titles";}
+function render(){
+ const q=document.getElementById("search").value.trim().toLowerCase();
+ let shown=items.filter(x=>x.title.toLowerCase().includes(q));
+ if(currentTab==="recent") shown=shown.filter(x=>!x.original).sort((a,b)=>b.addedAt-a.addedAt);
+ else if(currentTab==="movies") shown=shown.filter(x=>x.type==="Movie"&&!x.watched);
+ else if(currentTab==="series") shown=shown.filter(x=>x.type==="Series"&&!x.watched);
+ else if(currentTab==="anime") shown=shown.filter(x=>x.type==="Anime"&&!x.watched);
+ else if(currentTab==="watched") shown=shown.filter(x=>x.watched);
+ list.innerHTML="";
+ if(!shown.length) list.innerHTML='<div class="empty">Nothing here yet. Add a title with “＋ Add new”.</div>';
+ shown.forEach(item=>{
+  const row=document.createElement("div");row.className="item"+(item.watched?" done":"");
+  const box=document.createElement("input");box.type="checkbox";box.checked=!!item.watched;box.setAttribute("aria-label","Mark "+item.title+" watched");
+  box.addEventListener("change",()=>{item.watched=box.checked;save();render();});
+  const name=document.createElement("div");name.className="name";name.textContent=item.title;
+  const meta=document.createElement("span");meta.className="meta";meta.textContent=item.original?"From your original list":"Added by you";
+  name.append(meta);
+  const tag=document.createElement("span");tag.className="tag";tag.textContent=item.type;
+  const remove=document.createElement("button");remove.className="remove";remove.type="button";remove.title="Remove title";remove.setAttribute("aria-label","Remove "+item.title);remove.textContent="×";
+  remove.addEventListener("click",()=>{if(confirm('Remove "'+item.title+'" from your list?')){items=items.filter(x=>x.id!==item.id);save();render();}});
+  row.append(box,name,tag,remove);list.append(row);
+ });
+ const watched=items.filter(x=>x.watched).length;
+ document.getElementById("count").textContent=watched+" of "+items.length+" watched";
+ const pct=items.length?Math.round(watched/items.length*100):0;
+ document.getElementById("percent").textContent=pct+"%";document.getElementById("fill").style.width=pct+"%";
+ document.getElementById("listtitle").textContent=labelForTab(currentTab);
+ document.getElementById("shown").textContent=shown.length+" titles";
+ document.querySelectorAll(".tab").forEach(b=>b.classList.toggle("active",b.dataset.tab===currentTab));
+}
+document.getElementById("tabs").addEventListener("click",e=>{const b=e.target.closest("[data-tab]");if(b){currentTab=b.dataset.tab;render();}});
+document.getElementById("search").addEventListener("input",render);
+document.getElementById("addtoggle").addEventListener("click",()=>{const b=document.getElementById("addbox");b.classList.toggle("open");if(b.classList.contains("open"))document.getElementById("newtitle").focus();});
+document.getElementById("addform").addEventListener("submit",e=>{
+ e.preventDefault();const title=document.getElementById("newtitle").value.trim();const type=document.getElementById("newtype").value;
+ if(!title)return;
+ if(items.some(x=>x.title.toLowerCase()===title.toLowerCase()&&x.type===type)){alert("That title is already in your list for this category.");return;}
+ items.push({id:"new-"+Date.now()+"-"+Math.random().toString(36).slice(2,7),title,type,watched:false,addedAt:Date.now(),original:false});
+ save();document.getElementById("newtitle").value="";currentTab="recent";document.getElementById("addbox").classList.remove("open");render();
+});
+document.getElementById("copy").addEventListener("click",async()=>{
+ const text=items.filter(x=>currentTab==="watched"?x.watched:currentTab==="movies"?x.type==="Movie":currentTab==="series"?x.type==="Series":currentTab==="anime"?x.type==="Anime":true).map(x=>(x.watched?"[x] ":"[ ] ")+ "["+x.type+"] "+x.title).join("\n");
+ try{await navigator.clipboard.writeText(text);alert("List copied.");}catch(e){const ta=document.createElement("textarea");ta.value=text;document.body.append(ta);ta.select();document.execCommand("copy");ta.remove();alert("List copied.");}
+});
+document.getElementById("export").addEventListener("click",()=>{
+ const blob=new Blob([JSON.stringify(items,null,2)],{type:"application/json"});const url=URL.createObjectURL(blob);const a=document.createElement("a");a.href=url;a.download="my-watchlist-backup.json";a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);
+});
+render();
+</script></body></html>

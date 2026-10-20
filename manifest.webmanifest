@@ -1,0 +1,11 @@
+{
+  "name": "My Watchlist",
+  "short_name": "Watchlist",
+  "description": "An offline checklist for movies, series and anime.",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#f7f5f0",
+  "theme_color": "#3f6c52",
+  "icons": [{"src":"icon.svg","sizes":"any","type":"image/svg+xml","purpose":"any maskable"}]
+}
