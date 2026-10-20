@@ -1,110 +1,167 @@
 <!doctype html>
-<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
-<title>My Watchlist</title>
-<style>
-:root { color-scheme: light dark; --bg: light-dark(#f7f5f0,#171916); --card: light-dark(#ffffff,#242824); --ink: light-dark(#202720,#f1f3ee); --muted: light-dark(#687268,#aab3a8); --line: light-dark(#e1e5dc,#3b433b); --accent: light-dark(#3f6c52,#a8d5ad); --soft: light-dark(#e7eee4,#29392d); }
-* { box-sizing:border-box } body { margin:0;background:var(--bg);color:var(--ink);font:16px/1.45 system-ui,-apple-system,Segoe UI,sans-serif }
-main { max-width:780px;margin:0 auto;padding:22px 14px 44px } header { padding:8px 2px 16px }
-.eyebrow { color:var(--accent);font-weight:750;letter-spacing:.12em;text-transform:uppercase;font-size:12px }
-h1 { margin:6px 0 5px;font-size:clamp(28px,6vw,38px);letter-spacing:-.04em } p { color:var(--muted);margin:0 }
-.progressbox { background:var(--card);border:1px solid var(--line);border-radius:18px;padding:15px;margin:12px 0 15px }
-.progressline { display:flex;justify-content:space-between;gap:12px;font-size:14px;margin-bottom:10px }
-.track { height:8px;border-radius:99px;background:var(--line);overflow:hidden }.fill { height:100%;width:0%;background:var(--accent);transition:width .2s }
-.tabs { display:flex;gap:7px;overflow-x:auto;padding:2px 0 8px;margin-bottom:8px }
-.tab { white-space:nowrap;padding:9px 13px;border-radius:999px;background:var(--card);border:1px solid var(--line);font-size:14px }
-.tab.active { background:var(--accent);color:light-dark(#fff,#152319);border-color:var(--accent);font-weight:700 }
-.controls { display:flex;gap:8px;margin:10px 0 } input[type=search],input[type=text],select { flex:1;min-width:0;border:1px solid var(--line);border-radius:12px;padding:12px;background:var(--card);color:var(--ink);font:inherit }
-button { border:1px solid var(--line);border-radius:12px;background:var(--card);color:var(--ink);padding:10px 13px;font:inherit;cursor:pointer }
-button:focus-visible,input:focus-visible,select:focus-visible { outline:3px solid var(--accent);outline-offset:2px }
-.addbox { display:none;background:var(--soft);border:1px solid var(--line);border-radius:16px;padding:13px;margin:12px 0 }
-.addbox.open { display:block }.addbox h2 { font-size:17px;margin:0 0 10px }.addrow { display:flex;gap:8px;flex-wrap:wrap }.addrow input { flex:1 1 180px }.addrow select { flex:0 1 135px }
-.sectionhead { display:flex;align-items:center;justify-content:space-between;gap:10px;margin:16px 2px 9px }.sectionhead h2 { margin:0;font-size:18px }.small { color:var(--muted);font-size:13px }
-.list { background:var(--card);border:1px solid var(--line);border-radius:18px;overflow:hidden }
-.item { display:flex;align-items:flex-start;gap:11px;padding:13px 14px;border-bottom:1px solid var(--line) }.item:last-child { border-bottom:0 }
-.item input[type=checkbox] { width:20px;height:20px;margin:2px 0 0;accent-color:var(--accent);flex-shrink:0 }
-.item .name { flex:1;overflow-wrap:anywhere }.item.done .name { color:var(--muted);text-decoration:line-through }
-.meta { display:block;color:var(--muted);font-size:11px;margin-top:2px }.tag { font-size:11px;border-radius:7px;padding:3px 7px;background:var(--soft);color:var(--muted);align-self:center;white-space:nowrap }
-.remove { border:0;background:transparent;padding:3px 5px;color:var(--muted);font-size:18px }
-.empty { padding:22px;color:var(--muted);text-align:center }
-footer { color:var(--muted);font-size:12px;text-align:center;padding:18px 0 }
-@media(max-width:480px) { .tag { display:none }.controls button { padding:10px }.addrow select { flex:1 1 100% } }
-</style>
-<link rel="manifest" href="manifest.webmanifest">
-<meta name="theme-color" content="#3f6c52">
-<link rel="icon" href="icon.svg" type="image/svg+xml">
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#17131f">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="My Watchlist">
-<script>if("serviceWorker" in navigator){window.addEventListener("load",()=>navigator.serviceWorker.register("service-worker.js").catch(()=>{}));}</script></head><body><main>
-<header><div class="eyebrow">Your personal watchlist</div><h1>🎬 My Watchlist</h1><p>Movies, series and anime — all in one place. Tick items when you finish them.</p></header>
-<section class="progressbox" aria-live="polite"><div class="progressline"><strong id="count">0 watched</strong><span id="percent">0%</span></div><div class="track"><div class="fill" id="fill"></div></div></section>
+<title>My Watchlist ✦</title>
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icon.svg" type="image/svg+xml">
+<style>
+:root{color-scheme:dark;--bg:#17131f;--panel:#211b2b;--panel2:#2b2337;--ink:#f8f0ff;--muted:#b9acc8;--line:#443650;--pink:#f2a8d7;--mint:#b8f0d0;--gold:#f7d38b;--purple:#c8b5ff;--radius:20px}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(ellipse at top right,#30213d 0%,var(--bg) 45%);color:var(--ink);font:15px/1.5 ui-rounded,"Trebuchet MS",system-ui,sans-serif}
+main{max-width:900px;margin:auto;padding:20px 14px 48px}header{padding:12px 3px 18px}.eyebrow{color:var(--mint);font-size:11px;letter-spacing:.16em;text-transform:uppercase;font-weight:800}
+h1{font-size:clamp(30px,7vw,42px);line-height:1.08;letter-spacing:-.04em;margin:7px 0}.subtitle{color:var(--muted);max-width:650px}
+h2,h3,p{margin-top:0}button,input,select,textarea{font:inherit}button{cursor:pointer;border:1px solid var(--line);border-radius:13px;background:var(--panel2);color:var(--ink);padding:10px 13px}button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible{outline:3px solid var(--pink);outline-offset:2px}
+.primary{background:var(--pink);color:#321c31;border-color:var(--pink);font-weight:800}.ghost{background:transparent}.danger{color:#ffb4c4}.muted{color:var(--muted)}.tiny{font-size:12px;color:var(--muted)}
+.stats{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:14px 0}.stat,.panel{background:rgba(33,27,43,.94);border:1px solid var(--line);border-radius:var(--radius);padding:15px}.stat strong{display:block;font-size:23px;color:var(--mint)}.stat span{color:var(--muted);font-size:12px}.progress{height:7px;background:var(--line);border-radius:99px;overflow:hidden;margin-top:10px}.fill{height:100%;background:linear-gradient(90deg,var(--pink),var(--mint));width:0}
+.tabs{display:flex;gap:7px;overflow:auto;padding:2px 0 10px;margin:12px 0}.tab{white-space:nowrap;border-radius:999px;padding:9px 13px;background:var(--panel);font-size:13px}.tab.active{background:var(--purple);color:#261b35;border-color:var(--purple);font-weight:800}
+.controls{display:flex;gap:8px;margin:9px 0;flex-wrap:wrap}input,select,textarea{min-width:0;background:#191520;border:1px solid var(--line);color:var(--ink);border-radius:12px;padding:11px 12px}input[type=search]{flex:1 1 170px}select{max-width:100%}
+.filters{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:8px 0 14px}.filters select{width:100%}
+.panel{margin:13px 0}.panel h2{font-size:19px;margin:0 0 9px}.panel p{color:var(--muted);margin-bottom:0}
+.addbox{display:none}.addbox.open{display:block}.formgrid{display:grid;grid-template-columns:1fr 1fr;gap:9px}.formgrid .wide{grid-column:1/-1}.formgrid input,.formgrid select,.formgrid textarea{width:100%}.formactions{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+.listhead{display:flex;align-items:center;justify-content:space-between;gap:10px;margin:16px 2px 8px}.listhead h2{font-size:19px;margin:0}.list{border:1px solid var(--line);border-radius:18px;overflow:hidden;background:var(--panel)}
+.item{display:grid;grid-template-columns:24px minmax(0,1fr) auto;gap:10px;padding:13px;border-bottom:1px solid var(--line);align-items:start}.item:last-child{border-bottom:0}.item input[type=checkbox]{width:19px;height:19px;margin:3px 0 0;accent-color:var(--mint)}.item.done{background:rgba(15,12,20,.22)}.item.done .title{color:#93879f;text-decoration:line-through}.title{font-weight:750;overflow-wrap:anywhere}.meta{font-size:11px;color:var(--muted);margin-top:3px}.desc{color:#d6c9e0;font-size:13px;margin-top:7px;white-space:pre-wrap}.chips{display:flex;gap:5px;flex-wrap:wrap;margin-top:7px}.chip{font-size:10px;border-radius:99px;background:#3b2e49;color:#e7d9f7;padding:3px 8px}.actions{display:flex;gap:5px;flex-wrap:wrap;justify-content:flex-end}.actions button{padding:6px 8px;font-size:12px}.empty{text-align:center;padding:25px;color:var(--muted)}
+.recommendation{border:1px solid var(--line);border-radius:15px;padding:12px;margin-top:9px;background:#261e31}.rec-title{font-weight:800}.rec-why{color:var(--muted);font-size:13px;margin:4px 0 8px}.rec-list{display:grid;grid-template-columns:1fr;gap:8px}.footer{text-align:center;color:var(--muted);font-size:11px;padding:22px 0}
+dialog{width:min(680px,calc(100% - 22px));max-height:90vh;overflow:auto;background:var(--bg);color:var(--ink);border:1px solid var(--line);border-radius:22px;padding:18px}dialog::backdrop{background:#09060dbb}dialog h2{margin-bottom:12px}.closebar{display:flex;justify-content:space-between;align-items:center;gap:8px}.closebar h2{margin:0}
+@media(min-width:650px){.stats{grid-template-columns:1fr 1fr}.rec-list{grid-template-columns:1fr 1fr}.item{grid-template-columns:24px minmax(0,1fr) auto}.formgrid{grid-template-columns:1fr 1fr 1fr}}
+@media(max-width:480px){main{padding:16px 10px 35px}.item{grid-template-columns:23px minmax(0,1fr)}.item .actions{grid-column:2;justify-content:flex-start}.filters{grid-template-columns:1fr 1fr}.formgrid{grid-template-columns:1fr}.formgrid .wide{grid-column:auto}.stats{gap:8px}.stat{padding:12px}}
+</style>
+<script>
+if("serviceWorker" in navigator){window.addEventListener("load",()=>navigator.serviceWorker.register("./service-worker.js").catch(()=>{}));}
+</script>
+</head>
+<body><main>
+<header><div class="eyebrow">your tiny movie universe ✦</div><h1>🎬 My Watchlist <span style="color:var(--pink)">♡</span></h1><p class="subtitle">A cozy place for movies, series & anime. Sort your mood, explore genres, keep notes, and find your next watch.</p></header>
+<section class="stats">
+  <div class="stat"><strong id="count">0 / 0</strong><span>titles watched</span><div class="progress"><div class="fill" id="fill"></div></div></div>
+  <div class="stat"><strong id="percent">0%</strong><span>watchlist completed</span><div class="tiny" id="remaining" style="margin-top:7px">Let's find your next favourite ✨</div></div>
+</section>
 <div class="tabs" id="tabs">
-<button class="tab active" data-tab="all">All</button><button class="tab" data-tab="recent">Recently added</button><button class="tab" data-tab="movies">Movies</button><button class="tab" data-tab="series">Series</button><button class="tab" data-tab="anime">Anime</button><button class="tab" data-tab="watched">Watched</button>
+<button class="tab active" data-tab="all">✦ All</button><button class="tab" data-tab="recent">＋ Recently added</button><button class="tab" data-tab="movies">🎬 Movies</button><button class="tab" data-tab="series">📺 Series</button><button class="tab" data-tab="anime">🌸 Anime</button><button class="tab" data-tab="watched">✓ Watched</button><button class="tab" data-tab="favorites">♡ Favourites</button><button class="tab" data-tab="recommend">💡 Smart picks</button>
 </div>
-<div class="controls"><input id="search" type="search" placeholder="Search titles…" aria-label="Search titles"><button id="addtoggle" type="button">＋ Add new</button></div>
-<section class="addbox" id="addbox"><h2>Add to your watchlist</h2><form id="addform"><div class="addrow"><input id="newtitle" type="text" placeholder="Enter movie, series or anime title" required maxlength="140"><select id="newtype" aria-label="Type"><option value="Movie">Movie</option><option value="Series">Series</option><option value="Anime">Anime</option></select><button type="submit">Add title</button></div></form><p class="small" style="margin-top:8px">New titles appear in Recently added and the matching category.</p></section>
-<div class="sectionhead"><h2 id="listtitle">All titles</h2><span class="small" id="shown"></span></div>
-<div class="list" id="list"></div>
-<div class="controls"><button id="copy" type="button">Copy current list</button><button id="export" type="button">Export backup</button></div>
-<footer>Your checklist is saved in this browser on this device. Use Export backup to keep a copy before clearing browser data.</footer>
-</main><script>
+<div class="controls"><input id="search" type="search" placeholder="Search titles, genres, language…" aria-label="Search"><button class="primary" id="addtoggle">＋ Add title</button></div>
+<div class="filters"><select id="genrefilter" aria-label="Filter by genre"><option value="">All genres</option></select><select id="langfilter" aria-label="Filter by language"><option value="">All languages</option></select></div>
+<div class="controls"><label class="tiny" for="theme">Accent colour</label><select id="theme"><option value="pink">Pink & lavender</option><option value="mint">Mint & lilac</option><option value="blue">Midnight blue</option><option value="gold">Soft gold</option></select><select id="sortmode" aria-label="Sort list"><option value="unwatched">Unwatched first</option><option value="title">Title A–Z</option><option value="newest">Recently added first</option><option value="rating">Highest rating first</option></select></div>
+
+<section class="panel addbox" id="addbox"><h2 id="formtitle">Add to your watchlist ✨</h2>
+<form id="editform"><div class="formgrid">
+<input id="f-title" class="wide" placeholder="Title" required maxlength="160">
+<select id="f-type"><option>Movie</option><option>Series</option><option>Anime</option></select>
+<select id="f-genre"><option value="">Choose genre</option></select>
+<select id="f-language"><option value="">Language</option><option>Malayalam</option><option>Tamil</option><option>Telugu</option><option>Kannada</option><option>Hindi</option><option>English</option><option>Korean</option><option>Japanese</option><option>Chinese</option><option>French</option><option>Spanish</option><option>Other / Unknown</option></select>
+<textarea id="f-desc" class="wide" rows="3" placeholder="Short description / what it's about (optional)"></textarea>
+<input id="f-tags" class="wide" placeholder="Extra genres or tags, comma-separated (e.g. slow burn, mystery)">
+<input id="f-image" class="wide" type="url" placeholder="Poster image URL (optional)">
+<select id="f-rating"><option value="">Your rating (optional)</option><option value="1">★☆☆☆☆</option><option value="2">★★☆☆☆</option><option value="3">★★★☆☆</option><option value="4">★★★★☆</option><option value="5">★★★★★</option></select>
+<label style="display:flex;align-items:center;gap:8px;color:var(--muted)"><input id="f-favorite" type="checkbox" style="width:auto"> ♡ Favourite</label>
+</div><p class="tiny" style="margin:8px 0">Edit these details anytime. Add a poster image URL, or use “Ask AI” to open ChatGPT with a ready-made prompt. AI and poster searches need internet.</p>
+<div class="formactions"><button class="primary" type="submit">Save title</button><button type="button" id="searchdetails">Search details online ↗</button><button type="button" id="canceladd">Cancel</button></div>
+</form></section>
+
+<section class="panel" id="recs-panel" hidden><h2>💡 What are you in the mood for?</h2><p>These smart picks use the genres and tags saved in your list. Add genres to titles to get more tailored suggestions.</p>
+<div class="controls"><select id="mood"><option value="">Any mood</option><option>Romance</option><option>Romantic comedy</option><option>Fantasy</option><option>Action</option><option>Thriller</option><option>Psychological thriller</option><option>Dark comedy</option><option>Drama</option><option>Comedy</option><option>Horror</option><option>Science fiction</option><option>Feel-good</option><option>Mystery</option><option>Animation</option></select><select id="rec-language"><option value="">Any language</option><option>Malayalam</option><option>Tamil</option><option>Telugu</option><option>Kannada</option><option>Hindi</option><option>English</option><option>Korean</option><option>Japanese</option><option>Chinese</option><option>French</option><option>Spanish</option></select><button class="primary" id="getrecs">Find picks ✨</button></div>
+<div id="recs"></div></section>
+
+<div class="listhead"><h2 id="listtitle">All titles</h2><span class="tiny" id="shown"></span></div><div class="list" id="list"></div>
+<div class="controls"><button id="copy">Copy current list</button><button id="export">Export backup</button><button id="importbtn">Import backup</button><input id="importfile" type="file" accept="application/json" hidden></div>
+<footer>Saved on this device/browser. Your changes are independent from friends' devices. Export a backup before clearing browser data. Smart picks are based on your saved tags, not a live AI service.</footer>
+</main>
+<dialog id="detaildialog"><div class="closebar"><h2>Edit title ✨</h2><button id="closedialog" aria-label="Close">✕</button></div><div id="dialogcontent"></div></dialog>
+<script>
 const initialTitles = ["Wild Robot", "Atonement", "No country for old man", "We live in time", "Song of sparrow", "Riffle club", "Tell me who I am", "1917", "Mystic river", "The prisoners", "Exhuma", "The usual suspects", "Persuit of happiness", "Bullet of train", "What’s eating Gilbert grape", "How to make millions before grandma dies", "On your wedding day", "Don’t breath", "La la land", "Sookmadharshini", "Love letter", "The kite runner", "Before sunset", "Nosferatu", "Whip lash", "Black swan", "ARM", "The substance", "Incendies", "Midsummer", "Dune", "Wolf of the Wall Street", "Her", "Everything everywhere all at once", "Joy land", "Portrait of a lady on fire", "Gifted", "Begin again", "Poor things", "Officer on duty", "Taxi driver", "Taken", "The whale", "Past live", "Moonlight", "Dancer in the dark", "Big world", "Girls will be girls", "Miracle in Cell No. 7", "Anatomy of fall", "Anora", "The Darjeeling Limited", "Spirits home coming", "Flow", "Waiting", "12 years of slave", "Jojo rabbit", "Memoir of murder", "Better days", "Love Sonia", "Perks of being a wallflower", "The aviator", "Ne zha", "Schindler's List", "Conclave", "Cast Away", "Prisoners", "The lovely bones", "Capernaum", "About time", "Burning", "Crunch roll", "Home bound", "Superhero of melegaon", "Life is beautiful", "The ugly", "Bugonia", "Hacksaw ridge", "Sympathy for mr vengeance", "Children of men", "Ex machina", "Primer", "12 angry man", "Heat", "Girl with dragon tattoo", "Raakh", "Wrong turn", "Rigor mortis", "Perfect days", "Mother", "Tar", "Iruvar", "Voice mail for Isabel", "War machine", "Elephant man", "Shoplifters", "Theeran Adhigaaram Ondru"];
 const STORAGE_KEY = "my-watchlist-v2";
-let items = [];
-try {
- const saved = JSON.parse(localStorage.getItem(STORAGE_KEY) || "null");
- if (Array.isArray(saved) && saved.length) items = saved;
-} catch(e) {}
-if (!items.length) items = initialTitles.map((title,i)=>({id:"initial-"+i,title,type:"Movie",watched:false,addedAt:i,original:true}));
-let currentTab = "all";
-const list = document.getElementById("list");
-function save(){ try{localStorage.setItem(STORAGE_KEY,JSON.stringify(items));}catch(e){} }
-function labelForTab(tab){return ({all:"All titles",recent:"Recently added",movies:"Movies",series:"Series",anime:"Anime",watched:"Watched"})[tab]||"All titles";}
+const genres = ["Romance","Romantic comedy","Romantic drama","Fantasy","Action","Adventure","Thriller","Psychological thriller","Mystery","Crime","Drama","Comedy","Dark comedy","Horror","Science fiction","Animation","Documentary","War","Historical","Coming-of-age","Family","Feel-good","Musical","Other"];
+const languageOptions = ["Malayalam","Tamil","Telugu","Kannada","Hindi","English","Korean","Japanese","Chinese","French","Spanish","Other / Unknown"];
+let items=[];
+try{const saved=JSON.parse(localStorage.getItem(STORAGE_KEY)||"null");if(Array.isArray(saved))items=saved;}catch(e){}
+if(!items.length)items=initialTitles.map((title,i)=>({id:"initial-"+i,title,type:"Movie",watched:false,addedAt:i,original:true,genre:"",language:"",description:"",tags:""}));
+items=items.map((x,i)=>({id:x.id||"item-"+i,title:x.title||"Untitled",type:["Movie","Series","Anime"].includes(x.type)?x.type:"Movie",watched:!!x.watched,addedAt:x.addedAt??i,original:x.original??String(x.id||"").startsWith("initial-"),genre:x.genre||"",language:x.language||"",description:x.description||"",tags:x.tags||"",imageUrl:x.imageUrl||"",rating:x.rating||"",favorite:!!x.favorite}));
+let currentTab="all", editingId=null;
+const $=id=>document.getElementById(id);
+const list=$("list");
+function save(){try{localStorage.setItem(STORAGE_KEY,JSON.stringify(items));}catch(e){alert("Couldn't save in this browser. Please export a backup.");}}
+function setOptions(select, values, first){const old=select.value;select.innerHTML="";const op=document.createElement("option");op.value="";op.textContent=first;select.append(op);values.forEach(v=>{const o=document.createElement("option");o.value=v;o.textContent=v;select.append(o)});if(values.includes(old))select.value=old;}
+function fillFilters(){setOptions($("genrefilter"),[...new Set([...genres,...items.map(x=>x.genre).filter(Boolean)])].sort(),"All genres");setOptions($("langfilter"),[...new Set([...languageOptions,...items.map(x=>x.language).filter(Boolean)])].sort(),"All languages");setOptions($("f-genre"),genres,"Choose genre");}
+function labelForTab(t){return ({all:"All titles",recent:"Recently added",movies:"Movies",series:"Series",anime:"Anime",watched:"Watched",favorites:"Favourites",recommend:"Smart picks"})[t]||"All titles";}
+function matchesGenre(x,g){return !g||x.genre===g||(x.tags||"").toLowerCase().includes(g.toLowerCase());}
 function render(){
- const q=document.getElementById("search").value.trim().toLowerCase();
- let shown=items.filter(x=>x.title.toLowerCase().includes(q));
- if(currentTab==="recent") shown=shown.filter(x=>!x.original).sort((a,b)=>b.addedAt-a.addedAt);
- else if(currentTab==="movies") shown=shown.filter(x=>x.type==="Movie"&&!x.watched);
- else if(currentTab==="series") shown=shown.filter(x=>x.type==="Series"&&!x.watched);
- else if(currentTab==="anime") shown=shown.filter(x=>x.type==="Anime"&&!x.watched);
- else if(currentTab==="watched") shown=shown.filter(x=>x.watched);
+ fillFilters();
+ const q=$("search").value.trim().toLowerCase(), gf=$("genrefilter").value, lf=$("langfilter").value;
+ let shown=items.filter(x=>(x.title+" "+x.genre+" "+x.language+" "+x.tags+" "+x.description).toLowerCase().includes(q)&&matchesGenre(x,gf)&&(!lf||x.language===lf));
+ if(currentTab==="recent")shown=shown.filter(x=>!x.original).sort((a,b)=>b.addedAt-a.addedAt);
+ else if(["movies","series","anime"].includes(currentTab))shown=shown.filter(x=>x.type===({movies:"Movie",series:"Series",anime:"Anime"}[currentTab]));
+ else if(currentTab==="watched")shown=shown.filter(x=>x.watched);
+ else if(currentTab==="favorites")shown=shown.filter(x=>x.favorite);
+ else if(currentTab==="recommend")shown=shown.filter(x=>!x.watched);
+ // Always place unwatched items first in each relevant list; watched items remain visible below.
+ if(currentTab!=="recent"){
+ const sort=$("sortmode")?.value||"unwatched";
+ shown.sort((a,b)=>sort==="title"?String(a.title).localeCompare(String(b.title)):sort==="newest"?b.addedAt-a.addedAt:sort==="rating"?(Number(b.rating)||0)-(Number(a.rating)||0):Number(a.watched)-Number(b.watched)||String(a.title).localeCompare(String(b.title)));
+ }
  list.innerHTML="";
- if(!shown.length) list.innerHTML='<div class="empty">Nothing here yet. Add a title with “＋ Add new”.</div>';
+ if(currentTab==="recommend"){ $("recs-panel").hidden=false; list.hidden=true; $("listtitle").textContent=""; $("shown").textContent=""; }
+ else {$("recs-panel").hidden=true;list.hidden=false;
+ if(!shown.length)list.innerHTML='<div class="empty">Nothing here yet ✨ Try another filter or add a title.</div>';
  shown.forEach(item=>{
   const row=document.createElement("div");row.className="item"+(item.watched?" done":"");
-  const box=document.createElement("input");box.type="checkbox";box.checked=!!item.watched;box.setAttribute("aria-label","Mark "+item.title+" watched");
-  box.addEventListener("change",()=>{item.watched=box.checked;save();render();});
-  const name=document.createElement("div");name.className="name";name.textContent=item.title;
-  const meta=document.createElement("span");meta.className="meta";meta.textContent=item.original?"From your original list":"Added by you";
-  name.append(meta);
-  const tag=document.createElement("span");tag.className="tag";tag.textContent=item.type;
-  const remove=document.createElement("button");remove.className="remove";remove.type="button";remove.title="Remove title";remove.setAttribute("aria-label","Remove "+item.title);remove.textContent="×";
-  remove.addEventListener("click",()=>{if(confirm('Remove "'+item.title+'" from your list?')){items=items.filter(x=>x.id!==item.id);save();render();}});
-  row.append(box,name,tag,remove);list.append(row);
+  const cb=document.createElement("input");cb.type="checkbox";cb.checked=item.watched;cb.setAttribute("aria-label","Mark "+item.title+" watched");cb.addEventListener("change",()=>{item.watched=cb.checked;save();render();});
+  const body=document.createElement("div"),title=document.createElement("div");title.className="title";title.textContent=item.title;body.append(title);
+  const meta=document.createElement("div");meta.className="meta";meta.textContent=[item.type,item.genre,item.language].filter(Boolean).join(" · ")||(item.original?"From original list":"Added by you");body.append(meta);
+  if(item.imageUrl){const img=document.createElement("img");img.src=item.imageUrl;img.alt=item.title+" poster";img.loading="lazy";img.style.cssText="display:block;width:94px;max-height:140px;object-fit:cover;border-radius:10px;margin-top:8px;border:1px solid var(--line)";img.onerror=()=>{img.alt="Poster unavailable";img.style.display="none";};body.append(img);}
+  if(item.description){const d=document.createElement("div");d.className="desc";d.textContent=item.description;body.append(d);}
+  if(item.favorite||item.rating){const fav=document.createElement("div");fav.className="meta";fav.textContent=(item.favorite?"♡ Favourite":"")+(item.favorite&&item.rating?" · ":"")+(item.rating?"Your rating: "+"★".repeat(item.rating):"");body.append(fav);}
+  if(item.tags){const chips=document.createElement("div");chips.className="chips";item.tags.split(",").map(s=>s.trim()).filter(Boolean).slice(0,6).forEach(t=>{const c=document.createElement("span");c.className="chip";c.textContent=t;chips.append(c)});body.append(chips);}
+  const actions=document.createElement("div");actions.className="actions";
+  const favbtn=document.createElement("button");favbtn.textContent=item.favorite?"♥ Unfavourite":"♡ Favourite";favbtn.addEventListener("click",()=>{item.favorite=!item.favorite;save();render();});
+  const edit=document.createElement("button");edit.textContent="✎ Edit";edit.addEventListener("click",()=>openEdit(item.id));
+  const info=document.createElement("button");info.textContent="ⓘ Details";info.addEventListener("click",()=>{if(item.description){alert(item.title+"\\n\\n"+item.description+"\\n\\nGenre: "+(item.genre||"Not set")+"\\nLanguage: "+(item.language||"Not set"));}else openEdit(item.id);});
+  const search=document.createElement("button");search.textContent="↗ Research";search.addEventListener("click",()=>window.open("https://www.google.com/search?q="+encodeURIComponent(item.title+" movie synopsis genre language"),"_blank","noopener"));
+  const ai=document.createElement("button");ai.textContent="✦ Ask AI";ai.addEventListener("click",()=>{const prompt="Help me learn about this watchlist title: "+item.title+"\\nType: "+item.type+"\\nKnown genre: "+(item.genre||"unknown")+"\\nLanguage: "+(item.language||"unknown")+"\\nMy notes: "+(item.description||"none")+"\\nPlease give a spoiler-free short synopsis, genres, language/country, mood, content notes if reliably known, and 3 similar recommendations. Clearly say if any detail is uncertain.";window.open("https://chatgpt.com/?q="+encodeURIComponent(prompt),"_blank","noopener");});
+  const del=document.createElement("button");del.textContent="×";del.className="danger";del.title="Remove title";del.addEventListener("click",()=>{if(confirm('Remove "'+item.title+'" from your list?')){items=items.filter(x=>x.id!==item.id);save();render();}});
+  actions.append(favbtn,edit,info,search,ai,del);row.append(cb,body,actions);list.append(row);
  });
- const watched=items.filter(x=>x.watched).length;
- document.getElementById("count").textContent=watched+" of "+items.length+" watched";
- const pct=items.length?Math.round(watched/items.length*100):0;
- document.getElementById("percent").textContent=pct+"%";document.getElementById("fill").style.width=pct+"%";
- document.getElementById("listtitle").textContent=labelForTab(currentTab);
- document.getElementById("shown").textContent=shown.length+" titles";
+ $("listtitle").textContent=labelForTab(currentTab);$("shown").textContent=shown.length+" titles";}
+ const watched=items.filter(x=>x.watched).length,pct=items.length?Math.round(watched/items.length*100):0;
+ $("count").textContent=watched+" / "+items.length;$("percent").textContent=pct+"%";$("fill").style.width=pct+"%";$("remaining").textContent=(items.length-watched)+" left to watch ✨";
  document.querySelectorAll(".tab").forEach(b=>b.classList.toggle("active",b.dataset.tab===currentTab));
 }
-document.getElementById("tabs").addEventListener("click",e=>{const b=e.target.closest("[data-tab]");if(b){currentTab=b.dataset.tab;render();}});
-document.getElementById("search").addEventListener("input",render);
-document.getElementById("addtoggle").addEventListener("click",()=>{const b=document.getElementById("addbox");b.classList.toggle("open");if(b.classList.contains("open"))document.getElementById("newtitle").focus();});
-document.getElementById("addform").addEventListener("submit",e=>{
- e.preventDefault();const title=document.getElementById("newtitle").value.trim();const type=document.getElementById("newtype").value;
- if(!title)return;
- if(items.some(x=>x.title.toLowerCase()===title.toLowerCase()&&x.type===type)){alert("That title is already in your list for this category.");return;}
- items.push({id:"new-"+Date.now()+"-"+Math.random().toString(36).slice(2,7),title,type,watched:false,addedAt:Date.now(),original:false});
- save();document.getElementById("newtitle").value="";currentTab="recent";document.getElementById("addbox").classList.remove("open");render();
+function openAdd(){editingId=null;$("editform").reset();$("formtitle").textContent="Add to your watchlist ✨";$("addbox").classList.add("open");$("f-title").focus();window.scrollTo({top:$("addbox").offsetTop-10,behavior:"smooth"});}
+function openEdit(id){const x=items.find(y=>y.id===id);if(!x)return;editingId=id;$("f-title").value=x.title;$("f-type").value=x.type;$("f-genre").value=x.genre||"";$("f-language").value=x.language||"";$("f-desc").value=x.description||"";$("f-tags").value=x.tags||"";$("f-image").value=x.imageUrl||"";$("f-rating").value=x.rating||"";$("f-favorite").checked=!!x.favorite;$("formtitle").textContent="Edit title ✨";$("addbox").classList.add("open");window.scrollTo({top:$("addbox").offsetTop-10,behavior:"smooth"});}
+$("tabs").addEventListener("click",e=>{const b=e.target.closest("[data-tab]");if(b){currentTab=b.dataset.tab;render();if(currentTab==="recommend")buildRecs();}});
+$("search").addEventListener("input",render);$("genrefilter").addEventListener("change",render);$("langfilter").addEventListener("change",render);$("sortmode").addEventListener("change",render);
+$("theme").addEventListener("change",()=>{const themes={pink:["#f2a8d7","#c8b5ff"],mint:["#b8f0d0","#c8b5ff"],blue:["#9ecbff","#b7b8ff"],gold:["#f7d38b","#e8b7e8"]};const t=themes[$("theme").value]||themes.pink;document.documentElement.style.setProperty("--pink",t[0]);document.documentElement.style.setProperty("--purple",t[1]);});
+$("addtoggle").addEventListener("click",()=>{if($("addbox").classList.contains("open"))$("addbox").classList.remove("open");else openAdd();});
+$("canceladd").addEventListener("click",()=>$("addbox").classList.remove("open"));
+$("editform").addEventListener("submit",e=>{e.preventDefault();const title=$("f-title").value.trim(),type=$("f-type").value;if(!title)return;
+ if(items.some(x=>x.id!==editingId&&x.title.toLowerCase()===title.toLowerCase()&&x.type===type)){alert("That title is already in this category.");return;}
+ const data={title,type,genre:$("f-genre").value,language:$("f-language").value,description:$("f-desc").value.trim(),tags:$("f-tags").value.trim(),imageUrl:$("f-image").value.trim(),rating:$("f-rating").value?Number($("f-rating").value):"",favorite:$("f-favorite").checked};
+ if(editingId){Object.assign(items.find(x=>x.id===editingId),data);}else items.push({id:"new-"+Date.now()+"-"+Math.random().toString(36).slice(2,7),...data,watched:false,addedAt:Date.now(),original:false});
+ save();$("editform").reset();$("addbox").classList.remove("open");currentTab=editingId?currentTab:"recent";editingId=null;render();
 });
-document.getElementById("copy").addEventListener("click",async()=>{
- const text=items.filter(x=>currentTab==="watched"?x.watched:currentTab==="movies"?x.type==="Movie":currentTab==="series"?x.type==="Series":currentTab==="anime"?x.type==="Anime":true).map(x=>(x.watched?"[x] ":"[ ] ")+ "["+x.type+"] "+x.title).join("\n");
- try{await navigator.clipboard.writeText(text);alert("List copied.");}catch(e){const ta=document.createElement("textarea");ta.value=text;document.body.append(ta);ta.select();document.execCommand("copy");ta.remove();alert("List copied.");}
-});
-document.getElementById("export").addEventListener("click",()=>{
- const blob=new Blob([JSON.stringify(items,null,2)],{type:"application/json"});const url=URL.createObjectURL(blob);const a=document.createElement("a");a.href=url;a.download="my-watchlist-backup.json";a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);
-});
+$("searchdetails").addEventListener("click",()=>{const t=$("f-title").value.trim();if(!t){alert("Enter the title first.");return;}window.open("https://www.google.com/search?q="+encodeURIComponent(t+" movie series anime synopsis genre language"),"_blank","noopener");});
+function buildRecs(){
+ const mood=$("mood").value,lang=$("rec-language").value;
+ const unwatched=items.filter(x=>!x.watched);
+ const ranked=unwatched.map(x=>{let score=0,why=[];
+  const terms=[x.genre,...(x.tags||"").split(",")].filter(Boolean).map(v=>v.toLowerCase());
+  if(mood&&terms.some(t=>t.includes(mood.toLowerCase())||mood.toLowerCase().includes(t))){score+=5;why.push("matches your "+mood+" mood");}
+  if(lang&&x.language===lang){score+=3;why.push(lang+" language");}
+  if(x.description)score+=1;
+  if(x.addedAt>Date.now()-30*86400000)score+=.5;
+  return {...x,score,why};
+ }).sort((a,b)=>b.score-a.score||a.title.localeCompare(b.title)).slice(0,8);
+ const box=$("recs");box.innerHTML="";
+ if(!ranked.length){box.innerHTML='<div class="empty">Your watchlist is empty. Add some titles first.</div>';return;}
+ ranked.forEach(x=>{const card=document.createElement("div");card.className="recommendation";const t=document.createElement("div");t.className="rec-title";t.textContent=x.title;const why=document.createElement("div");why.className="rec-why";why.textContent=x.why.length?x.why.join(" · "):"A title you haven't watched yet — add a genre or language to personalise future picks.";card.append(t,why);if(x.description){const d=document.createElement("p");d.textContent=x.description;card.append(d);}const b=document.createElement("button");b.textContent="Edit genres/details";b.addEventListener("click",()=>openEdit(x.id));card.append(b);box.append(card);});
+}
+$("getrecs").addEventListener("click",buildRecs);$("mood").addEventListener("change",buildRecs);$("rec-language").addEventListener("change",buildRecs);
+$("copy").addEventListener("click",async()=>{const text=items.filter(x=>currentTab==="watched"?x.watched:currentTab==="movies"?x.type==="Movie":currentTab==="series"?x.type==="Series":currentTab==="anime"?x.type==="Anime":true).sort((a,b)=>Number(a.watched)-Number(b.watched)).map(x=>(x.watched?"[x] ":"[ ] ")+"["+x.type+(x.genre?" · "+x.genre:"")+(x.language?" · "+x.language:"")+"] "+x.title).join("\n");try{await navigator.clipboard.writeText(text);alert("List copied!");}catch(e){const ta=document.createElement("textarea");ta.value=text;document.body.append(ta);ta.select();document.execCommand("copy");ta.remove();alert("List copied!");}});
+$("export").addEventListener("click",()=>{const blob=new Blob([JSON.stringify(items,null,2)],{type:"application/json"}),url=URL.createObjectURL(blob),a=document.createElement("a");a.href=url;a.download="my-watchlist-backup.json";a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);});
+$("importbtn").addEventListener("click",()=>$("importfile").click());
+$("importfile").addEventListener("change",async e=>{const file=e.target.files[0];if(!file)return;try{const parsed=JSON.parse(await file.text());if(!Array.isArray(parsed))throw new Error();if(confirm("Replace this device's list with the imported backup?")){items=parsed.map((x,i)=>({...x,id:x.id||"import-"+i,watched:!!x.watched,type:["Movie","Series","Anime"].includes(x.type)?x.type:"Movie",genre:x.genre||"",language:x.language||"",description:x.description||"",tags:x.tags||"",imageUrl:x.imageUrl||"",rating:x.rating||"",favorite:!!x.favorite}));save();render();alert("Backup imported.");}}catch(err){alert("That backup file could not be read.");}e.target.value="";});
+$("closedialog").addEventListener("click",()=>$("detaildialog").close());
 render();
 </script></body></html>

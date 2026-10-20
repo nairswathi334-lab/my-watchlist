@@ -1,15 +1,32 @@
-MY WATCHLIST — OFFLINE APP PACKAGE
+MY WATCHLIST — UPDATE GUIDE
 
-This package contains your 97-title watchlist as an installable Progressive Web App (PWA).
+Upload these five files to the root of your GitHub Pages repository, replacing existing files:
+index.html
+manifest.webmanifest
+service-worker.js
+icon.svg
+README.txt
 
-IMPORTANT: This ZIP is not an Android APK. Android Chrome requires the app to be served from an HTTPS website for the Install / Add to Home screen feature and offline service worker to work. After it is installed and opened once, the app shell can work offline. Your watch status is saved in that browser on that device.
+Features:
+- All / Recently added / Movies / Series / Anime / Watched / Smart picks
+- Watched items stay in their type category and sort below unwatched items
+- Edit title, type, genre, language, description, and tags
+- Search online for a title's details
+- Ask AI button opens ChatGPT with a title-specific prompt (internet and ChatGPT access required; not an embedded AI API)
+- Optional poster image URL field; paste a direct image URL to show a poster
+- Smart picks based on saved genres and languages
+- Export/import JSON backups
+- Local device storage and service-worker caching
 
-Files:
-- index.html: the watchlist app
-- manifest.webmanifest: installable app details
-- service-worker.js: offline caching
-- icon.svg: home-screen icon
+After uploading, commit changes and refresh the live site. If the installed app shows the old version, close it, open the website in Chrome, refresh, and reopen the app.
 
-Setup: Upload the contents of this folder to an HTTPS static host (for example, GitHub Pages or Netlify), open the resulting HTTPS address in Chrome on your Android phone, then use Chrome menu (⋮) > Install app or Add to Home screen. Open the app once while online before using it offline.
+Smart picks are rule-based recommendations, not a connected generative-AI model. Research buttons open online search results. Descriptions can be added/edited manually. Each device keeps its own list/progress unless a sync backend is added.
 
-For a truly standalone APK, this bundle would need to be wrapped and built with Android tooling; that build environment is not available in this chat.
+AI note: The Ask AI button opens ChatGPT in a new tab; it does not run an AI model inside the app. Poster URLs must be added manually in this version.
+
+Extra personalisation:
+- Favourites tab and favourite toggle
+- Optional personal rating from 1 to 5 stars
+- Accent colour options and sorting by title, newest, rating, or unwatched first
+- AI helper opens ChatGPT with a tailored prompt; it is not an embedded API connection
+- Poster image URL field; paste a direct image URL to show a poster
