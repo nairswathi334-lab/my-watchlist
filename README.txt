@@ -1,32 +1,26 @@
-MY WATCHLIST — UPDATE GUIDE
+MY WATCHLIST — UPDATED
 
-Upload these five files to the root of your GitHub Pages repository, replacing existing files:
-index.html
-manifest.webmanifest
-service-worker.js
-icon.svg
-README.txt
+Files:
+- index.html
+- manifest.webmanifest
+- service-worker.js
+- icon.svg
+- README.txt
 
-Features:
-- All / Recently added / Movies / Series / Anime / Watched / Smart picks
-- Watched items stay in their type category and sort below unwatched items
-- Edit title, type, genre, language, description, and tags
-- Search online for a title's details
-- Ask AI button opens ChatGPT with a title-specific prompt (internet and ChatGPT access required; not an embedded AI API)
-- Optional poster image URL field; paste a direct image URL to show a poster
-- Smart picks based on saved genres and languages
-- Export/import JSON backups
-- Local device storage and service-worker caching
+UPDATE YOUR EXISTING GITHUB PAGES APP
+1. Export a JSON backup from the app first.
+2. Download and extract the ZIP.
+3. Upload all five files to the root of your existing GitHub Pages repository, replacing files with the same names.
+4. Commit the changes and refresh the website.
+5. If the installed app still shows the old version, close it and reopen it after refreshing the website in Chrome.
 
-After uploading, commit changes and refresh the live site. If the installed app shows the old version, close it, open the website in Chrome, refresh, and reopen the app.
+IN-APP RECOMMENDATIONS
+- Smart Picks can match multiple selected genres and languages against your saved watchlist.
+- “Suggest new titles in this app” displays curated titles inside the app and lets you add a title to your list.
+- “Similar picks” on a title opens Smart Picks and selects that title's genre/language where available.
+- These suggestions use a built-in catalogue and matching logic. They do not call a live generative AI model, and they do not open ChatGPT.
 
-Smart picks are rule-based recommendations, not a connected generative-AI model. Research buttons open online search results. Descriptions can be added/edited manually. Each device keeps its own list/progress unless a sync backend is added.
-
-AI note: The Ask AI button opens ChatGPT in a new tab; it does not run an AI model inside the app. Poster URLs must be added manually in this version.
-
-Extra personalisation:
-- Favourites tab and favourite toggle
-- Optional personal rating from 1 to 5 stars
-- Accent colour options and sorting by title, newest, rating, or unwatched first
-- AI helper opens ChatGPT with a tailored prompt; it is not an embedded API connection
-- Poster image URL field; paste a direct image URL to show a poster
+DATA & OFFLINE
+- Your watchlist is saved in the current browser/device and is not automatically synced between devices.
+- Once the app has loaded and cached, its core features and built-in suggestions can work offline.
+- Back up your list before clearing browser data.
