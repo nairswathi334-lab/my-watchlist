@@ -24,7 +24,7 @@ h2,h3,p{margin-top:0}button,input,select,textarea{font:inherit}button{cursor:poi
 .addbox{display:none}.addbox.open{display:block}.formgrid{display:grid;grid-template-columns:1fr 1fr;gap:9px}.formgrid .wide{grid-column:1/-1}.formgrid input,.formgrid select,.formgrid textarea{width:100%}.formactions{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
 .listhead{display:flex;align-items:center;justify-content:space-between;gap:10px;margin:16px 2px 8px}.listhead h2{font-size:19px;margin:0}.list{border:1px solid var(--line);border-radius:18px;overflow:hidden;background:var(--panel)}
 .item{display:grid;grid-template-columns:24px minmax(0,1fr) auto;gap:10px;padding:13px;border-bottom:1px solid var(--line);align-items:start}.item:last-child{border-bottom:0}.item input[type=checkbox]{width:19px;height:19px;margin:3px 0 0;accent-color:var(--mint)}.item.done{background:rgba(15,12,20,.22)}.item.done .title{color:#93879f;text-decoration:line-through}.title{font-weight:750;overflow-wrap:anywhere}.meta{font-size:11px;color:var(--muted);margin-top:3px}.desc{color:#d6c9e0;font-size:13px;margin-top:7px;white-space:pre-wrap}.chips{display:flex;gap:5px;flex-wrap:wrap;margin-top:7px}.chip{font-size:10px;border-radius:99px;background:#3b2e49;color:#e7d9f7;padding:3px 8px}.actions{display:flex;gap:5px;flex-wrap:wrap;justify-content:flex-end}.actions button{padding:6px 8px;font-size:12px}.empty{text-align:center;padding:25px;color:var(--muted)}
-.recommendation{border:1px solid var(--line);border-radius:15px;padding:12px;margin-top:9px;background:#261e31}.rec-title{font-weight:800}.rec-why{color:var(--muted);font-size:13px;margin:4px 0 8px}.rec-list{display:grid;grid-template-columns:1fr;gap:8px}.footer{text-align:center;color:var(--muted);font-size:11px;padding:22px 0}
+.choice-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:7px;margin:8px 0 14px}.choice{display:flex;align-items:center;gap:8px;background:var(--panel2);border:1px solid var(--line);border-radius:11px;padding:9px;font-size:13px}.choice input{accent-color:var(--pink);width:16px;height:16px;margin:0;flex-shrink:0}.filter-heading{font-size:14px;font-weight:800;margin:14px 0 4px}.custom-pref{width:100%;margin:4px 0 8px}.recommendation{border:1px solid var(--line);border-radius:15px;padding:12px;margin-top:9px;background:#261e31}.rec-title{font-weight:800}.rec-why{color:var(--muted);font-size:13px;margin:4px 0 8px}.rec-list{display:grid;grid-template-columns:1fr;gap:8px}.footer{text-align:center;color:var(--muted);font-size:11px;padding:22px 0}
 dialog{width:min(680px,calc(100% - 22px));max-height:90vh;overflow:auto;background:var(--bg);color:var(--ink);border:1px solid var(--line);border-radius:22px;padding:18px}dialog::backdrop{background:#09060dbb}dialog h2{margin-bottom:12px}.closebar{display:flex;justify-content:space-between;align-items:center;gap:8px}.closebar h2{margin:0}
 @media(min-width:650px){.stats{grid-template-columns:1fr 1fr}.rec-list{grid-template-columns:1fr 1fr}.item{grid-template-columns:24px minmax(0,1fr) auto}.formgrid{grid-template-columns:1fr 1fr 1fr}}
 @media(max-width:480px){main{padding:16px 10px 35px}.item{grid-template-columns:23px minmax(0,1fr)}.item .actions{grid-column:2;justify-content:flex-start}.filters{grid-template-columns:1fr 1fr}.formgrid{grid-template-columns:1fr}.formgrid .wide{grid-column:auto}.stats{gap:8px}.stat{padding:12px}}
@@ -61,13 +61,15 @@ if("serviceWorker" in navigator){window.addEventListener("load",()=>navigator.se
 <div class="formactions"><button class="primary" type="submit">Save title</button><button type="button" id="searchdetails">Search details online ↗</button><button type="button" id="canceladd">Cancel</button></div>
 </form></section>
 
-<section class="panel" id="recs-panel" hidden><h2>💡 What are you in the mood for?</h2><p>These smart picks use the genres and tags saved in your list. Add genres to titles to get more tailored suggestions.</p>
-<div class="controls"><select id="mood"><option value="">Any mood</option><option>Romance</option><option>Romantic comedy</option><option>Fantasy</option><option>Action</option><option>Thriller</option><option>Psychological thriller</option><option>Dark comedy</option><option>Drama</option><option>Comedy</option><option>Horror</option><option>Science fiction</option><option>Feel-good</option><option>Mystery</option><option>Animation</option></select><select id="rec-language"><option value="">Any language</option><option>Malayalam</option><option>Tamil</option><option>Telugu</option><option>Kannada</option><option>Hindi</option><option>English</option><option>Korean</option><option>Japanese</option><option>Chinese</option><option>French</option><option>Spanish</option></select><button class="primary" id="getrecs">Find picks ✨</button></div>
-<div id="recs"></div></section>
+<section class="panel" id="recs-panel" hidden><h2>💡 Find your next watch</h2><p>Choose as many genres and languages as you like. A title can match <strong>any one</strong> of your selected genres and <strong>any one</strong> of your selected languages. Leave a section empty to allow any option.</p>
+<div class="filter-heading">🎭 Choose genres (multiple)</div><div id="rec-genres" class="choice-grid"></div><input id="custom-genres" class="custom-pref" placeholder="Add other genres, comma-separated (optional)">
+<div class="filter-heading">🌍 Choose languages (multiple)</div><div id="rec-languages" class="choice-grid"></div><input id="custom-languages" class="custom-pref" placeholder="Add any other languages, comma-separated (optional)">
+<div class="controls"><button class="primary" id="getrecs">Find picks from my watchlist ✨</button><button id="ask-new-ai">Ask AI for new recommendations ↗</button><button class="ghost" id="clear-prefs">Clear selections</button></div>
+<p class="tiny">Watchlist picks are based on the details you have saved. “Ask AI” opens ChatGPT with your chosen genres and languages to suggest new titles, including ones not already in your list.</p><div id="recs"></div></section>
 
 <div class="listhead"><h2 id="listtitle">All titles</h2><span class="tiny" id="shown"></span></div><div class="list" id="list"></div>
 <div class="controls"><button id="copy">Copy current list</button><button id="export">Export backup</button><button id="importbtn">Import backup</button><input id="importfile" type="file" accept="application/json" hidden></div>
-<footer>Saved on this device/browser. Your changes are independent from friends' devices. Export a backup before clearing browser data. Smart picks are based on your saved tags, not a live AI service.</footer>
+<footer>Saved on this device/browser. Your changes are independent from friends' devices. Export a backup before clearing browser data. Smart picks match your selected genres/languages against saved title details. Ask AI opens ChatGPT for new recommendations.</footer>
 </main>
 <dialog id="detaildialog"><div class="closebar"><h2>Edit title ✨</h2><button id="closedialog" aria-label="Close">✕</button></div><div id="dialogcontent"></div></dialog>
 <script>
@@ -142,22 +144,47 @@ $("editform").addEventListener("submit",e=>{e.preventDefault();const title=$("f-
  save();$("editform").reset();$("addbox").classList.remove("open");currentTab=editingId?currentTab:"recent";editingId=null;render();
 });
 $("searchdetails").addEventListener("click",()=>{const t=$("f-title").value.trim();if(!t){alert("Enter the title first.");return;}window.open("https://www.google.com/search?q="+encodeURIComponent(t+" movie series anime synopsis genre language"),"_blank","noopener");});
+function renderPreferenceChoices(containerId, values, groupName){
+ const box=$(containerId);box.innerHTML="";
+ values.forEach((value,i)=>{const label=document.createElement("label");label.className="choice";const input=document.createElement("input");input.type="checkbox";input.name=groupName;input.value=value;input.addEventListener("change",buildRecs);const text=document.createElement("span");text.textContent=value;label.append(input,text);box.append(label);});
+}
+renderPreferenceChoices("rec-genres",genres,"rec-genre");
+renderPreferenceChoices("rec-languages",languageOptions,"rec-language");
+function selectedPrefs(groupName, customId){
+ const selected=[...document.querySelectorAll('input[name="'+groupName+'"]:checked')].map(el=>el.value);
+ const custom=$(customId).value.split(",").map(x=>x.trim()).filter(Boolean);
+ return [...new Set([...selected,...custom])];
+}
 function buildRecs(){
- const mood=$("mood").value,lang=$("rec-language").value;
+ const pickedGenres=selectedPrefs("rec-genre","custom-genres"),pickedLanguages=selectedPrefs("rec-language","custom-languages");
+ const norm=s=>String(s||"").toLocaleLowerCase().trim();
  const unwatched=items.filter(x=>!x.watched);
- const ranked=unwatched.map(x=>{let score=0,why=[];
-  const terms=[x.genre,...(x.tags||"").split(",")].filter(Boolean).map(v=>v.toLowerCase());
-  if(mood&&terms.some(t=>t.includes(mood.toLowerCase())||mood.toLowerCase().includes(t))){score+=5;why.push("matches your "+mood+" mood");}
-  if(lang&&x.language===lang){score+=3;why.push(lang+" language");}
+ const matching=unwatched.map(x=>{
+  const terms=[x.genre,...(x.tags||"").split(",")].filter(Boolean).map(norm);
+  const genreMatches=!pickedGenres.length||pickedGenres.some(g=>terms.some(t=>t.includes(norm(g))||norm(g).includes(t)));
+  const languageMatches=!pickedLanguages.length||pickedLanguages.some(l=>norm(x.language)===norm(l));
+  let score=0,why=[];
+  const matchedGenres=pickedGenres.filter(g=>terms.some(t=>t.includes(norm(g))||norm(g).includes(t)));
+  const matchedLanguages=pickedLanguages.filter(l=>norm(x.language)===norm(l));
+  if(matchedGenres.length){score+=5;why.push("genre: "+matchedGenres.join(", "));}
+  if(matchedLanguages.length){score+=3;why.push("language: "+matchedLanguages.join(", "));}
   if(x.description)score+=1;
   if(x.addedAt>Date.now()-30*86400000)score+=.5;
-  return {...x,score,why};
- }).sort((a,b)=>b.score-a.score||a.title.localeCompare(b.title)).slice(0,8);
+  return {...x,score,why,genreMatches,languageMatches};
+ }).filter(x=>x.genreMatches&&x.languageMatches)
+ .sort((a,b)=>b.score-a.score||a.title.localeCompare(b.title)).slice(0,12);
  const box=$("recs");box.innerHTML="";
- if(!ranked.length){box.innerHTML='<div class="empty">Your watchlist is empty. Add some titles first.</div>';return;}
- ranked.forEach(x=>{const card=document.createElement("div");card.className="recommendation";const t=document.createElement("div");t.className="rec-title";t.textContent=x.title;const why=document.createElement("div");why.className="rec-why";why.textContent=x.why.length?x.why.join(" · "):"A title you haven't watched yet — add a genre or language to personalise future picks.";card.append(t,why);if(x.description){const d=document.createElement("p");d.textContent=x.description;card.append(d);}const b=document.createElement("button");b.textContent="Edit genres/details";b.addEventListener("click",()=>openEdit(x.id));card.append(b);box.append(card);});
+ if(!matching.length){const msg=document.createElement("div");msg.className="empty";msg.textContent=unwatched.length?"No unwatched titles in your saved list match these choices yet. Try adding more genres/languages to titles, or use ‘Ask AI for new recommendations’.":"Your watchlist has no unwatched titles yet. Add titles or ask AI for new recommendations.";box.append(msg);return;}
+ matching.forEach(x=>{const card=document.createElement("div");card.className="recommendation";const t=document.createElement("div");t.className="rec-title";t.textContent=x.title;const why=document.createElement("div");why.className="rec-why";why.textContent=x.why.length?x.why.join(" · "):"Matches your choices (no genre or language restrictions selected).";card.append(t,why);if(x.description){const d=document.createElement("p");d.textContent=x.description;card.append(d);}const b=document.createElement("button");b.textContent="Edit genres/details";b.addEventListener("click",()=>openEdit(x.id));card.append(b);box.append(card);});
 }
-$("getrecs").addEventListener("click",buildRecs);$("mood").addEventListener("change",buildRecs);$("rec-language").addEventListener("change",buildRecs);
+$("getrecs").addEventListener("click",buildRecs);
+$("custom-genres").addEventListener("input",buildRecs);$("custom-languages").addEventListener("input",buildRecs);
+$("clear-prefs").addEventListener("click",()=>{document.querySelectorAll('input[name="rec-genre"],input[name="rec-language"]').forEach(el=>el.checked=false);$("custom-genres").value="";$("custom-languages").value="";buildRecs();});
+$("ask-new-ai").addEventListener("click",()=>{
+ const gs=selectedPrefs("rec-genre","custom-genres"),ls=selectedPrefs("rec-language","custom-languages");
+ const prompt="Recommend movies, series, or anime for my watch mood. Genres I want (match any of these): "+(gs.length?gs.join(", "):"any genre")+". Languages I accept (match any of these): "+(ls.length?ls.join(", "):"any language")+". Recommend 12 varied titles that fit these preferences, prioritise good matches, and for each give title, year, language, genres, a short spoiler-free description, and why it fits. Do not limit suggestions to my existing watchlist. If a title's language or genre is uncertain, say so. Avoid spoilers.";
+ window.open("https://chatgpt.com/?q="+encodeURIComponent(prompt),"_blank","noopener");
+});
 $("copy").addEventListener("click",async()=>{const text=items.filter(x=>currentTab==="watched"?x.watched:currentTab==="movies"?x.type==="Movie":currentTab==="series"?x.type==="Series":currentTab==="anime"?x.type==="Anime":true).sort((a,b)=>Number(a.watched)-Number(b.watched)).map(x=>(x.watched?"[x] ":"[ ] ")+"["+x.type+(x.genre?" · "+x.genre:"")+(x.language?" · "+x.language:"")+"] "+x.title).join("\n");try{await navigator.clipboard.writeText(text);alert("List copied!");}catch(e){const ta=document.createElement("textarea");ta.value=text;document.body.append(ta);ta.select();document.execCommand("copy");ta.remove();alert("List copied!");}});
 $("export").addEventListener("click",()=>{const blob=new Blob([JSON.stringify(items,null,2)],{type:"application/json"}),url=URL.createObjectURL(blob),a=document.createElement("a");a.href=url;a.download="my-watchlist-backup.json";a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);});
 $("importbtn").addEventListener("click",()=>$("importfile").click());
